@@ -31,7 +31,7 @@ Completed:
 
 Initial device state-test execution crashed before running cases because the test APK omitted `androidx.test.runner.AndroidJUnitRunner`. Its temporary package was removed, and the original launcher version, default HOME role and native ADB server were verified unchanged. Commit `fc95b0546` adds the explicit `androidx.test:runner:1.6.2` dependency and catalog alias; it changes no production code, production dependency or toolchain version. The corrected app and test APK builds completed at commit `fc95b0546` with exit 0 in 8m 4s. All seven state tests then passed on the identity-verified S25 through the existing Tailscale ADB route (`OK (7 tests)`, 0.033 s, receipt 2026-11-13 13:03:57 UTC). The self-targeting package `de.mm20.launcher2.ui.test` was removed afterward. The installed launcher remained 1.39.3-fdroid / 2026012400; its default HOME role and existing native ADB server were verified unchanged. These state tests do not constitute a visual Home/Obsidian acceptance test.
 
-Not completed: visual reproduction/acceptance on the installed launcher, or installation of the official update. The phone locked before the attempted interactive sequence. Operator update choice and unlock readiness are pending.
+Not completed: visual Home/Obsidian acceptance. The operator subsequently selected our fork; installation and startup succeeded as recorded below. Explicit default-launcher selection and gesture-configuration approval remain pending. The official update was not installed.
 
 The build task names above are now verified by execution. Device instrumentation uses the existing Desktop native ADB server and fresh helper proof; do not start a new Linux ADB server or switch launcher defaults. Main app version remains 1.41.0 / 2026091500.
 
@@ -71,7 +71,7 @@ The official [F-Droid listing](https://f-droid.org/en/packages/de.mm20.launcher2
 
 `85192966b7cfc30a2708845066267dbd312e42555631fb719ba50bfd923179c3`
 
-Official update APK SHA-256: `a83264c6fb437aad083c61206a4e79dba555300dbd4578fa17c0c43f55798739`. Installed executable SHA-256: `7a7ee3516f854c700e4e9add50369db5427c9ffb92571d7ce03a5bc90ea0de65`. Package name and signer are compatible with an in-place update; settings retention and post-update behavior still need verification. The operator was asked to choose official-update installation versus keeping the installed app unchanged and validating the fork first. No installation of the official launcher update while that decision is pending.
+Official update APK SHA-256: `a83264c6fb437aad083c61206a4e79dba555300dbd4578fa17c0c43f55798739`. Installed executable SHA-256: `7a7ee3516f854c700e4e9add50369db5427c9ffb92571d7ce03a5bc90ea0de65`. Package name and signer are compatible with an in-place update; settings retention and post-update behavior still need verification. The operator subsequently chose our fork instead, to support future modifications. The official update was not installed.
 
 ### Isolated native builds and evidence
 
@@ -84,3 +84,17 @@ The initial source archive was updated only with the two committed test-dependen
 The final test APK SHA-256 is `36a4b85dd6fcfa3883d67bec33b02104e5312e1a027f632938b13365b81824cd`. Its manifest was checked to target only its own `de.mm20.launcher2.ui.test` package, and the previously missing runner class was verified as defined in its DEX before the successful retry. The initial failed-run receipt is preserved separately.
 
 Private local evidence is retained under `/mnt/vk-storage/kv-homescreen-bug-20261113` and `B:\kv-homescreen-bug-20261113`: `device-test-result.json`, `runner-build-status.json`, state-test log, lint XML and `lint-baseline-comparison.json` (all 22 error files compare byte-identical to staging). These are diagnostic intermediates, not published review attachments. Never reuse an old script's selector without fresh `s25-adb status` identity/route proof. No Android application version, signing configuration, SDK declaration, module layout or inherited workflow was changed.
+
+## Authorized fork installation — 2026-11-13
+
+The operator explicitly selected our build: "beyond that, I'm going to want to make other improvements/modifications, so let's install ours". Fresh `s25-adb status` proved the exact S25 identity, live listener and actual Tailscale route/socket through Desktop's existing native server. Wi-Fi was on; this is not cellular proof. No connection, pairing, radio, security or listener changes were needed.
+
+The existing `defaultDebug` APK built from `fc95b05466741193eafc5c8861eb1dc1070e6091` was verified before installation. The five changed source/build files in the Desktop build snapshot match the current task-branch SHA-256 values. Manifest: `de.mm20.launcher2.debug`, 1.41.0 / 2026091500, min SDK 26, target SDK 37. Visible name: **Kvaesitso Debug**. APK SHA-256: `2605c4126fc885dfc4781380f254ddf5669a1758ffdd113d90986b968b9e8b5e`; verified signer certificate SHA-256: `732cc761deb6a1c4a447094cd0f9766ff96a03d48b9b6046103a74990704bef1`. This separate package has its own settings; the original app's configuration is not automatically transferred.
+
+Native `adb install --user 0` returned Success. Receipt at 13:42:22 UTC confirms the fork's installed version and preservation of the original 1.39.3-fdroid version, original default HOME role and existing ADB server. There was no uninstall, data clear, replacement of the release app, permission grant or default-role change. A first command exceeded Windows command-line limits before executing; the reviewed script-file invocation then performed the single installation.
+
+At 13:43 UTC the phone was unlocked. Explicit `am start -W` of the fork's LauncherActivity returned `Status: ok` and `LaunchState: COLD` (562 ms); the process was present and Android reported the fork as its resumed activity. No screenshot or app-private-data read was made. This checks startup only; it does not establish visual correctness or Home/Obsidian acceptance.
+
+PREVIEW.md separately requires explicit authorization for launcher selection. The operator was asked whether to make Kvaesitso Debug default and configure its Home action to Obsidian. That answer is pending. The current HOME role remains `de.mm20.launcher2.release`. Once authorized and ready, complete the acceptance matrix above. The existing app offers **Backup and restore** for operator-controlled settings transfer, and **Gestures → Home button/gesture** for configuration. No settings backup or transfer has been performed.
+
+Private receipts `fork-install-preflight.json`, `fork-install-result.json` and `fork-startup-result.json` are retained in the task's Desktop B: and MCP evidence directories. The required debug signing key is present at `B:\kv-homescreen-bug-20261113\android-user-home\debug.keystore`. Keep it private and preserve it for compatible future updates; do not delete that key as disposable build cleanup. No key was printed, exported or committed. The existing APK was reused without another build or paid service.
