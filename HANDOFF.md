@@ -1,9 +1,11 @@
 # Handoff
 
-The fork is `artinflight/Kvaesitso`; upstream is `MM2-0/Kvaesitso`. The canonical clone is `/mnt/vk-storage/projects/Kvaesitso`. Vibe project ID is `4bec76f9-8e07-4ddf-9d02-1e79313e48f6` and repository ID is `9886ae3c-5eb5-4412-9711-94054eb81014`; task PR target is staging.
+KV::Homescreen Bug, 2026-11-13. Worktree `/mnt/vk-storage/worktrees/0b85-kv-homescreen-bu/Kvaesitso` (host alias `/home/mcp/code/worktrees/0b85-kv-homescreen-bu/Kvaesitso`), branch `vk/0b85-kv-homescreen-bu`, based on freshly fetched staging `6d6dc32e9`. Target only staging; no merge authorized or performed. Version remains 1.41.0 / 2026091500.
 
-Read `AGENTS.md`, `STATE.md`, `STREAM.md`, `PREVIEW.md`, and `docs/FORK_SETUP.md`. Ops Playbook adoption adds docs and a pinned source manifest while preserving the imported Android source and GPL terms. The original readme has one appended operations section. Native app versioning remains in `app/app/build.gradle.kts`.
+Read `AGENTS.md`, `STATE.md`, `STREAM.md`, then `docs/HOMESCREEN_BUG.md`. The patch adds Home-button depth progress and an immediate resume reset for temporary app-launch pages, ahead of Home dispatch. Seven Android instrumentation tests cover scaffold progress, restored-page reset and preserved ordinary-page/swipe behavior.
 
-The next agent should inspect current Git/remote/Vibe state, create a separate task worktree from fresh origin/staging, and follow the chosen task. Do not run Gradle, fetch Android dependencies, install on S25, promote main, activate inherited workflows, or create releases merely to finish setup. Build and runtime checks are deliberately deferred; check live disk capacity first. No paid service was enabled, no dependency cache was created, and no device was accessed.
+Static source/patch/integrity checks passed. Android compilation, lint, instrumentation and device tests have NOT run. The pinned Gradle 9.6.0 distribution is absent; inspected compiler-cache directories are empty. SSD has only about 3.3 GiB free. Prepare adequate SSD capacity/toolchain before native checks; do not substitute cached older versions. No Gradle/SDK downloads or device actions occurred. Device install/testing needs separate authorization under `PREVIEW.md` and the S25 runbook.
 
-Session: fork setup, 2026-11-13 UTC. Validation and publication evidence: `docs/FORK_SETUP.md` and the staging PR.
+Recording inspection confirms disappearing launcher controls. The installed app version remains unknown; asked operator. The baseline already includes upstream `b0765ceed` for a different Home-only empty-page rendering issue, so the installed version matters. The patch is a source-level fix candidate, not a confirmed device fix. Keep the PR draft until native validation and Obsidian launch/return checks pass.
+
+No paid service or hosted workflow was enabled. Diagnostic media tools/contact sheet live at `/mnt/vk-storage/kv-homescreen-bug-20261113`; source and tests are tracked in this branch. Full remaining checks and cost/storage notes: `docs/HOMESCREEN_BUG.md`.

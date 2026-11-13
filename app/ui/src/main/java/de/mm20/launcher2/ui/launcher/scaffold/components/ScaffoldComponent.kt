@@ -43,6 +43,12 @@ internal abstract class ScaffoldComponent {
     open val survivesPause = false
 
     /**
+     * Clear this temporary page immediately on resume, regardless of the time spent away.
+     * This also applies when the scaffold is restored after activity recreation.
+     */
+    open val resetOnResume: Boolean = false
+
+    /**
      * Whether the component is scrolled all the way up
      * null, if the component does not provide content
      */

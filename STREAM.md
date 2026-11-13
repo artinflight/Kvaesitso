@@ -1,11 +1,10 @@
-# Fork setup stream
+# Home-button app-launch return fix
 
-- Stream: `ops/bootstrap-20261113` targeting `staging`.
-- Objective: fork registration and documentation-only Ops Playbook adoption.
-- Isolated checkout: `/mnt/vk-storage/projects/Kvaesitso`; initially clean, based on unchanged `origin/staging`.
-- In scope: operating docs, pinned baseline snapshot, provenance manifest, readme navigation, fork remotes, Vibe registration.
-- Out of scope: Android code/build changes, toolchain/dependency downloads, device work, releases, upstream pushes and service restarts.
-- Initial audit: upstream history/license/project files present; fork operating docs and staging/Vibe configuration absent. This stream supplies that baseline; hosted enforcement and native build verification are deferred.
-- Status: documentation baseline complete; static source/history/manifest/Vibe checks passed and are recorded in `docs/FORK_SETUP.md`.
-- Risk: copying generic web/version templates unmodified would misdescribe this existing Android app; root rules explicitly retain native preview/version behavior.
-- Integration: publish and merge the setup PR into staging after static validation; keep main at the imported upstream commit. Future normal work starts in a new task worktree from staging.
+- Task: KV::Homescreen Bug, 2026-11-13; target `staging`.
+- Branch/worktree: `vk/0b85-kv-homescreen-bu`, `/mnt/vk-storage/worktrees/0b85-kv-homescreen-bu/Kvaesitso` (host alias under `/home/mcp/code/worktrees`).
+- Baseline: freshly fetched `origin/staging` at `6d6dc32e96348bceb1be45ff6597607b74b8c4dc`; initially clean. Native version remains 1.41.0 / 2026091500.
+- Scope: launcher scaffold Home-button progress and temporary app-launch restoration; UI instrumentation tests and task documentation. No module/version/signing/application-ID changes, device operations, release, main promotion, or hosted workflow activation.
+- Implemented: Home uses depth progress like other tap gestures; app-launch splash pages reset immediately on resume before Home dispatch, including saved-state restoration; seven instrumentation tests added.
+- Validation: static patch/source/integrity checks pass. Android build, lint, instrumentation execution and device reproduction remain pending: pinned toolchain absent, only about 3.3 GiB SSD space available. Do not present static checks as Android test results.
+- Evidence/risks: `docs/HOMESCREEN_BUG.md`. Recording confirms disappearing controls but does not establish installed version; source already has a separate upstream Home-only rendering fix. Operator version answer pending.
+- Integration: draft PR to staging; validate the pinned Android build and runtime acceptance matrix before merge. Preserve setup history in `DELTA.md` and `docs/FORK_SETUP.md`.

@@ -9,3 +9,7 @@
 - Verification: source/history, manifest, docs and Vibe checks recorded in `docs/FORK_SETUP.md` before publication.
 - Deferred: all Android builds, dependencies, device operations, native runtime verification, hosted policy enforcement and releases.
 - Next: review setup, then choose the first development task from staging.
+
+## 2026-11-13 — Home-button app-launch return fix candidate
+
+Task branch `vk/0b85-kv-homescreen-bu` starts at fresh staging `6d6dc32e9` in the dedicated SSD worktree. Added Home-button depth progress and immediate resume cleanup for temporary launch pages, plus seven Android instrumentation tests. Recording confirms disappearing controls; installed version is unconfirmed and baseline already includes upstream `b0765ceed`. Static checks pass; Android build/lint/tests/device validation remain pending due absent pinned toolchain and low SSD capacity. No device action, version change, paid service, workflow activation or merge. See `docs/HOMESCREEN_BUG.md`, `STREAM.md`, and `HANDOFF.md`.

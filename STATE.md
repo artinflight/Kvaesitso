@@ -2,7 +2,7 @@
 
 ## Current objective
 
-Establish the artinflight fork, full-history MCP clone, Vibe project and Ops Playbook operating baseline without building Android or downloading dependencies.
+Fix the Home-button app-launch return bug on an isolated branch targeting staging. Fork setup is complete; the current patch and validation limits are recorded in `STREAM.md` and `docs/HOMESCREEN_BUG.md`.
 
 ## Confirmed current state
 
@@ -27,4 +27,4 @@ Normal work uses isolated task branches from `origin/staging` and PRs to `stagin
 
 ## Next safe step
 
-Review the completed setup and choose a first development task. Keep build/dependency work deferred until requested with adequate storage. See `docs/FORK_SETUP.md` for verification and source evidence.
+Review the Home-button fix candidate, confirm the installed app version, and prepare adequate SSD capacity and the pinned Android toolchain for build/lint/instrumentation checks. Runtime validation is pending; do not merge on static checks alone. No phone installation or launcher-default change is included. See `docs/HOMESCREEN_BUG.md` for the acceptance matrix and `docs/FORK_SETUP.md` for the earlier setup evidence.
