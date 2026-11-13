@@ -91,3 +91,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ```
 
 The plugin SDK modules (`plugins/sdk` and `core/shared`) are licensed under the Apache License 2.0.
+
+
+## artinflight fork operations
+
+This fork preserves the upstream Android project, history, attribution, and GPL license. Read [AGENTS.md](AGENTS.md), [STATE.md](STATE.md), [HANDOFF.md](HANDOFF.md), and the [fork setup record](docs/FORK_SETUP.md) before development. Normal tasks use isolated worktrees from `origin/staging` and PRs to `staging`; `main` promotion is separate work. Native builds, dependency downloads and device tests were deferred at setup; see [PREVIEW.md](PREVIEW.md).
