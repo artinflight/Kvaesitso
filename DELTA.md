@@ -23,3 +23,7 @@ Native app/test builds passed on isolated Desktop B: storage. Full lint on `9d17
 ## 2026-11-13 — operator-selected fork installation
 
 Operator chose our build for future modifications. Fresh S25 identity and Tailscale proof passed; verified default-debug APK from `fc95b0546` was installed as Kvaesitso Debug 1.41.0 / 2026091500 at 13:42 UTC. The original release, its HOME role and existing native ADB server were preserved. Cold startup succeeded on the unlocked phone at 13:43 UTC; no visual bug-fix acceptance is claimed. Explicit default-launcher selection and Home-to-Obsidian configuration were requested under PREVIEW.md and remain pending. Official update not installed. Preserve the task-local debug signing key for future compatible fork updates. Existing build reused, no paid service or new background resource. Receipts and next steps: `docs/HOMESCREEN_BUG.md` and `HANDOFF.md`.
+
+## 2026-11-13 — unresolved-problem routing check
+
+Operator reports the problem unresolved. Fresh S25/Tailscale proof and 13:53 UTC read-only inspection confirm original release 1.39.3-fdroid still owns HOME; the fork 1.41.0 is installed separately and the phone is locked. No new evidence of patch success/failure in a live Home/Obsidian cycle. Explicit default-selection/configuration and readiness question remains pending; no speculative code change or device-setting mutation. Receipt: private `unresolved-inspection.json`; live acceptance is still required.
