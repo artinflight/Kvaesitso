@@ -73,6 +73,7 @@ android {
 
 dependencies {
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.test.runner)
 
     implementation(libs.bundles.kotlin)
 
