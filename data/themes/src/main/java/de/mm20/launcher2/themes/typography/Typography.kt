@@ -195,6 +195,10 @@ sealed interface FontFamily {
 
 
     @Serializable
+    @SerialName("outfit")
+    data object Outfit : FontFamily
+
+    @Serializable
     @SerialName("device_headline")
     data object DeviceHeadline : FontFamily
 

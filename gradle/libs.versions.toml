@@ -39,6 +39,7 @@ koin = "4.2.2"
 ktor = "3.6.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
+testRunner = "1.6.2"
 espressoCore = "3.6.1"
 
 osmOpeningHours = "0.4.0"
@@ -119,6 +120,7 @@ koin-androidxcompose = { group = "io.insert-koin", name = "koin-androidx-compose
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "testRunner" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
 osmopeninghours = { group = "de.westnordost", name = "osm-opening-hours", version.ref = "osmOpeningHours" }

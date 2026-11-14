@@ -23,6 +23,7 @@ internal class LaunchComponent(
     private val searchable: SavableSearchable,
 ): ScaffoldComponent() {
     override val showSearchBar = false
+    override val resetOnResume = true
 
     override val isAtTop: State<Boolean?> = mutableStateOf(true)
     override val isAtBottom: State<Boolean?> = mutableStateOf(true)

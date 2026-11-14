@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import de.mm20.launcher2.themes.typography.DefaultEmphasizedTextStyles
 import de.mm20.launcher2.themes.typography.DefaultTextStyles
+import de.mm20.launcher2.ui.theme.typography.fontfamily.Outfit
 import de.mm20.launcher2.ui.theme.typography.fontfamily.GoogleSansFlex
 import de.mm20.launcher2.ui.theme.typography.fontfamily.getDeviceBodyFontFamily
 import de.mm20.launcher2.ui.theme.typography.fontfamily.getDeviceHeadlineFontFamily
@@ -317,6 +318,7 @@ fun fontFamilyOf(
 ): FontFamily {
     return when (fontFamily) {
         is ThemeFontFamily.LauncherDefault -> GoogleSansFlex(fontFamily.settings)
+        is ThemeFontFamily.Outfit -> Outfit
         is ThemeFontFamily.DeviceHeadline -> getDeviceHeadlineFontFamily(context)
         is ThemeFontFamily.DeviceBody -> getDeviceBodyFontFamily(context)
         is ThemeFontFamily.SansSerif -> FontFamily.SansSerif

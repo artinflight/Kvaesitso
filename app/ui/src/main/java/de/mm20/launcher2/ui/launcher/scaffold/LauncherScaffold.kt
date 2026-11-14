@@ -689,7 +689,7 @@ internal class LauncherScaffoldState(
         val anim = currentAnimation ?: return
 
         when (gesture) {
-            Gesture.TapSearchBar, Gesture.DoubleTap, Gesture.LongPress -> {
+            Gesture.TapSearchBar, Gesture.DoubleTap, Gesture.LongPress, Gesture.HomeButton -> {
                 currentOffset3D = Offset3D(z = progress)
             }
 
@@ -900,6 +900,16 @@ internal class LauncherScaffoldState(
         }
     }
 
+    /**
+     * Restore home before handling a return intent so a temporary page cannot consume input
+     * or cause the Home action to launch the app again.
+     */
+    suspend fun resetOnResumeIfNeeded(): Boolean {
+        if (currentComponent?.resetOnResume != true) return false
+        reset()
+        return true
+    }
+
     suspend fun reset() {
         isSearchBarFocused = false
         currentOffset3D = Offset3D.Zero
@@ -1095,23 +1105,31 @@ internal fun LauncherScaffold(
             val activity = (activity as? SharedLauncherActivity) ?: return@LaunchedEffect
 
             lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                // A configuration update can recreate this effect without a new Home press.
+                // Consume the intent before launching: launch history can update the config.
+                val isNewIntent = activity.isNewIntent
+                activity.isNewIntent = false
                 try {
-                    if (activity.pauseTime > 0L && System.currentTimeMillis() - activity.pauseTime < 50L && activity.isNewIntent) {
-                        if (!state.isLocked) {
-                            if (state.currentProgress > 0f) {
-                                state.onPredictiveBackEnd()
+                    when {
+                        state.resetOnResumeIfNeeded() -> Unit
+                        isNewIntent -> {
+                            if (!state.isLocked) {
+                                if (state.currentProgress > 0f) {
+                                    state.onPredictiveBackEnd()
+                                } else {
+                                    state.onHomeButtonPress()
+                                }
                             } else {
-                                state.onHomeButtonPress()
+                                activity.onBackPressedDispatcher.onBackPressed()
                             }
-                        } else {
-                            activity.onBackPressedDispatcher.onBackPressed()
                         }
-                    } else if (activity.pauseTime > 0L && System.currentTimeMillis() - activity.pauseTime > 5000L) {
-                        if (!state.isLocked) {
-                            if (state.currentComponent?.survivesPause != true) {
-                                state.reset()
+                        activity.pauseTime > 0L && System.currentTimeMillis() - activity.pauseTime > 5000L -> {
+                            if (!state.isLocked) {
+                                if (state.currentComponent?.survivesPause != true) {
+                                    state.reset()
+                                }
+                                searchVM.reset()
                             }
-                            searchVM.reset()
                         }
                     }
                     awaitCancellation()

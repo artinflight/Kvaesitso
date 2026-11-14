@@ -5,8 +5,10 @@ import android.content.Intent
 import android.content.Intent.ShortcutIconResource
 import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
+import android.content.pm.ShortcutInfo
 import android.os.Process
 import android.os.UserManager
+import android.os.UserHandle
 import android.util.Log
 import androidx.core.content.getSystemService
 import de.mm20.launcher2.ktx.jsonObjectOf
@@ -32,52 +34,62 @@ class LauncherShortcutSerializer : SearchableSerializer {
 
 }
 
-class LauncherShortcutDeserializer(
-    val context: Context
+internal interface ShortcutAccess {
+    fun hasHostPermission(): Boolean
+    fun getShortcuts(query: LauncherApps.ShortcutQuery, user: UserHandle): List<ShortcutInfo>?
+}
+
+private class AndroidShortcutAccess(context: Context) : ShortcutAccess {
+    private val launcherApps = context.getSystemService<LauncherApps>()!!
+
+    override fun hasHostPermission() = launcherApps.hasShortcutHostPermission()
+
+    override fun getShortcuts(query: LauncherApps.ShortcutQuery, user: UserHandle) =
+        launcherApps.getShortcuts(query, user)
+}
+
+class LauncherShortcutDeserializer internal constructor(
+    val context: Context,
+    private val shortcutAccess: ShortcutAccess,
 ) : SearchableDeserializer, KoinComponent {
+    constructor(context: Context) : this(context, AndroidShortcutAccess(context))
 
     override suspend fun deserialize(serialized: String): SavableSearchable? {
         try {
-            val launcherApps =
-                context.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-
             val json = JSONObject(serialized)
             val packageName = json.getString("packagename")
             val id = json.getString("id")
             val userSerial = json.optLong("user", -1L)
-
             val userManager = context.getSystemService<UserManager>()!!
-            val user = if (userSerial == -1L) Process.myUserHandle() else (userManager.getUserForSerialNumber(userSerial) ?: return null)
+            val user = if (userSerial == -1L) Process.myUserHandle()
+                else userManager.getUserForSerialNumber(userSerial) ?: return null
 
-            if (!launcherApps.hasShortcutHostPermission()) {
-                return UnavailableShortcut(context, id, packageName, user, userSerial)
-            } else {
+            fun unavailable() = UnavailableShortcut(context, id, packageName, user, userSerial)
+
+            return try {
+                if (!shortcutAccess.hasHostPermission()) return unavailable()
                 val query = LauncherApps.ShortcutQuery()
-                query.setPackage(packageName)
-                query.setQueryFlags(
-                    LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED or
+                    .setPackage(packageName)
+                    .setQueryFlags(
+                        LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED or
                             LauncherApps.ShortcutQuery.FLAG_MATCH_DYNAMIC or
                             LauncherApps.ShortcutQuery.FLAG_MATCH_MANIFEST or
                             LauncherApps.ShortcutQuery.FLAG_MATCH_CACHED or
                             LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED_BY_ANY_LAUNCHER
-                )
-                query.setShortcutIds(mutableListOf(id))
-                val shortcuts = try {
-                    launcherApps.getShortcuts(query, user)
-                } catch (e: IllegalStateException) {
-                    return null
-                }
-                if (shortcuts.isNullOrEmpty()) {
-                    return null
-                } else {
-                    return LauncherShortcut(
-                        context = context,
-                        launcherShortcut = shortcuts[0],
                     )
-                }
+                    .setShortcutIds(listOf(id))
+                val shortcut = shortcutAccess.getShortcuts(query, user)?.firstOrNull()
+                // Other launchers' pinned-only shortcuts are not visible to a regular launcher.
+                // Keep the saved record while its source app exists, including during migration.
+                if (shortcut == null) unavailable() else LauncherShortcut(context, shortcut)
+            } catch (e: IllegalStateException) {
+                unavailable()
+            } catch (e: SecurityException) {
+                // Access may be revoked after the permission check, or a profile may be locked.
+                unavailable()
             }
         } catch (e: SecurityException) {
-            Log.e("MM20", "Failed to deserialize shortcut: $serialized", e)
+            Log.w("MM20", "Cannot access shortcut profile", e)
             return null
         }
     }
