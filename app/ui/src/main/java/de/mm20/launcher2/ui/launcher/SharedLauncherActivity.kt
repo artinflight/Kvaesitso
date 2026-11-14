@@ -473,7 +473,9 @@ abstract class SharedLauncherActivity(
     var isNewIntent = false
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        isNewIntent = true
+        // A Home press on the focused launcher is an action; returning from another app is not.
+        isNewIntent = intent.action == Intent.ACTION_MAIN &&
+                intent.hasCategory(Intent.CATEGORY_HOME) && window.decorView.hasWindowFocus()
     }
 
     override fun onPause() {

@@ -1105,10 +1105,14 @@ internal fun LauncherScaffold(
             val activity = (activity as? SharedLauncherActivity) ?: return@LaunchedEffect
 
             lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                // A configuration update can recreate this effect without a new Home press.
+                // Consume the intent before launching: launch history can update the config.
+                val isNewIntent = activity.isNewIntent
+                activity.isNewIntent = false
                 try {
                     when {
                         state.resetOnResumeIfNeeded() -> Unit
-                        activity.pauseTime > 0L && System.currentTimeMillis() - activity.pauseTime < 50L && activity.isNewIntent -> {
+                        isNewIntent -> {
                             if (!state.isLocked) {
                                 if (state.currentProgress > 0f) {
                                     state.onPredictiveBackEnd()
