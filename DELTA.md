@@ -40,3 +40,12 @@ Later at 14:58 UTC, two real Home/Obsidian short/long return cycles passed with 
 ## 2026-11-13 — continuing failure report and active-version check
 
 At 22:18 UTC the operator again reports “Not fixed.” Fresh cellular Tailscale proof passed with the exact S25 and existing native server. Read-only metadata confirms original 1.39.3-fdroid remains HOME and our separate 1.41.0 is installed; Waze was foreground and no UI/default/data action was taken. Requested idle readiness without repeating already granted permissions. Prior return checks do not establish rapid-return timing because Desktop/ADB polling added unmeasured delay. Prepared a private device-side timing/input check and passed host shell syntax only; no transfer or execution, new build, production edit or fix acceptance. Remaining migration/activation and genuine interaction testing are still open.
+
+
+## 2026-11-14 — setup-preservation update installed; record parity restored
+
+Operator said Ready; phone relocked during connection/settings launch and stayed locked, so no new live Home/input acceptance. Fresh S25/Tailscale proof through 02:19 UTC: Wi-Fi enabled, exact identity/native server preserved. Installed `6ffb291b4` in place: optional Outfit and retention of inaccessible shortcuts. App/test assemblies and changed-module lint pass; fifteen S25 tests pass. Existing broader lint remains unclean in staging-identical files.
+
+Runtime/notification/all-files grants restored and verified by app APIs. A settings transfer truncation was caught with the fork stopped; current backup recovered only that settings file, changing just the intended font UUID. No database restore. Audit identified three Chrome records already absent before update; other records unchanged. Guarded INSERT-IGNORE restored only those three after the retention fix. Final export verifies 310 saved items, 14 layouts, 12 customizations and 11 search actions against the source backup. Temporary packages/private comparison staging removed; final Desktop B: export hash `968cb08c8475f5fbcd2f27078cf0499d5c69b18629853030391143da61a787fe` verified.
+
+Original 1.39.3-fdroid remains HOME fallback with data/widgets/pins intact. Ten widgets and three Chrome shortcuts require functional setup/verification. Refresh original export for intervening changes and finish real Home/input acceptance with unlocked/awake phone under existing authorization. Preserve signing key; PR stays draft. No new permission decision, paid service, workflow, persistent helper, transport/security change, merge or main promotion.
