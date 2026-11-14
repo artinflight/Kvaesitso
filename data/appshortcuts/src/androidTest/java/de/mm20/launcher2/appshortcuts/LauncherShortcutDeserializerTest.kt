@@ -53,7 +53,7 @@ class LauncherShortcutDeserializerTest {
 
     private suspend fun assertRetained(api: ShortcutAccess) {
         val shortcut = LauncherShortcutDeserializer(context, api).deserialize(serialized)!!
-        assertTrue(shortcut.isUnavailable)
+        assertTrue(shortcut is UnavailableShortcut)
         assertEquals("shortcut://android/retained-site", shortcut.key)
         val saved = JSONObject(shortcut.getSerializer().serialize(shortcut)!!)
         assertEquals("android", saved.getString("packagename"))
