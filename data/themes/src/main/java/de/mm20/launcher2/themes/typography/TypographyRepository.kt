@@ -4,6 +4,7 @@ import android.content.Context
 import de.mm20.launcher2.database.AppDatabase
 import de.mm20.launcher2.themes.DefaultThemeId
 import de.mm20.launcher2.themes.MonospaceId
+import de.mm20.launcher2.themes.OutfitTypographyId
 import de.mm20.launcher2.themes.R
 import de.mm20.launcher2.themes.RoundedTypographyId
 import de.mm20.launcher2.themes.SerifId
@@ -32,6 +33,7 @@ class TypographyRepository(
     fun get(id: UUID): Flow<Typography?> {
         if (id == DefaultThemeId) return flowOf(default)
         if (id == RoundedTypographyId) return flowOf(defaultRound)
+        if (id == OutfitTypographyId) return flowOf(outfit)
         if (id == SystemFontId) return flowOf(systemFont)
         if (id == SerifId) return flowOf(serif)
         if (id == MonospaceId) return flowOf(monospace)
@@ -66,6 +68,7 @@ class TypographyRepository(
         return listOf(
             default,
             defaultRound,
+            outfit,
             systemFont,
             serif,
             monospace,
@@ -98,6 +101,17 @@ class TypographyRepository(
             emphasizedStyles = DefaultEmphasizedTextStyles,
         )
 
+
+    // Preserve the font pairing of the former built-in Outfit typography.
+    private val outfit: Typography
+        get() = Typography(
+            id = OutfitTypographyId,
+            builtIn = true,
+            name = "Outfit",
+            fonts = mapOf("brand" to FontFamily.Outfit, "plain" to null),
+            styles = DefaultTextStyles,
+            emphasizedStyles = DefaultEmphasizedTextStyles,
+        )
 
     private val systemFont: Typography
         get() = Typography(
